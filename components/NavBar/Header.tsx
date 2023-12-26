@@ -14,14 +14,14 @@ import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import { MdMenu } from "react-icons/md";
-import { Container, Grid, Stack, ThemeProvider, createTheme } from '@mui/material';
+import { Badge, Container, InputBase, Stack, ThemeProvider, alpha, createTheme, styled } from '@mui/material';
+import theme from '@/themes/theme';
+import { IoSearchOutline } from "react-icons/io5";
+import { FiBell } from "react-icons/fi";
+
 
 
 interface Props {
-    /**
-     * Injected by the documentation to work in an iframe.
-     * You won't need it on your project.
-     */
     window?: () => Window;
 }
 
@@ -65,12 +65,53 @@ export default function Header(props: Props) {
 
     const container = window !== undefined ? () => window().document.body : undefined;
 
+    const Search = styled('div')(({ theme }) => ({
+        position: 'relative',
+        borderRadius: theme.shape.borderRadius,
+        backgroundColor: alpha(theme.palette.common.white, 0.15),
+        '&:hover': {
+            backgroundColor: alpha(theme.palette.common.white, 0.25),
+        },
+        marginLeft: 0,
+        width: '100%',
+        [theme.breakpoints.up('sm')]: {
+            marginLeft: theme.spacing(1),
+            width: 'auto',
+        },
+    }));
+
+    const SearchIconWrapper = styled('div')(({ theme }) => ({
+        padding: theme.spacing(0, 2),
+        height: '100%',
+        position: 'absolute',
+        pointerEvents: 'none',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+    }));
+
+    const StyledInputBase = styled(InputBase)(({ theme }) => ({
+        color: 'inherit',
+        width: '100%',
+        '& .MuiInputBase-input': {
+            padding: theme.spacing(1, 1, 1, 0),
+            paddingLeft: `calc(1em + ${theme.spacing(4)})`,
+            transition: theme.transitions.create('width'),
+            [theme.breakpoints.up('sm')]: {
+                width: '12ch',
+                '&:focus': {
+                    width: '20ch',
+                },
+            },
+        },
+    }));
+
     return (
         <Stack spacing={2} sx={{ flexGrow: 1 }}>
             <ThemeProvider theme={darkTheme}>
                 <CssBaseline />
                 <AppBar component="nav">
-                    <Container maxWidth='xl' sx={{ px: '2' }}>
+                    <Container maxWidth='xl' sx={{ px: theme.spacing(2) }}>
                         <Toolbar>
                             <IconButton
                                 color="inherit"
@@ -95,7 +136,23 @@ export default function Header(props: Props) {
                             >
                                 MUI
                             </Typography>
+                            <Box sx={{ display: { xs: 'none', sm: 'flex' }, alignItems: 'center', gap: '16px' }}>
+                                <Search sx={{ display: 'flex', alignItems: 'center', height: '40px' }}>
+                                    <SearchIconWrapper>
+                                        <IoSearchOutline />
+                                    </SearchIconWrapper>
+                                    <StyledInputBase
+                                        placeholder="Search…"
+                                        inputProps={{ 'aria-label': 'search' }}
+                                    />
+                                </Search>
+                                <IconButton size="large" aria-label="show 17 new notifications" color="inherit">
+                                    <Badge badgeContent={4} color="error">
+                                        <FiBell />
+                                    </Badge>
+                                </IconButton>
 
+                            </Box>
                         </Toolbar>
                     </Container>
                 </AppBar>
