@@ -2,9 +2,6 @@ import type { Metadata } from 'next'
 import './globals.sass'
 import Header from '@/components/NavBar/Header'
 import Footer from '@/components/Footer/Footer'
-import { ThemeProvider } from '@mui/material/styles';
-import theme from '@/themes/theme';
-
 
 
 export const metadata: Metadata = {
@@ -20,13 +17,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <ThemeProvider theme={theme}>
-          <Header />
-          <main>
-            {children}
-          </main>
-          <Footer />
-        </ThemeProvider>
+        <Header />
+        <main>
+          {children}
+        </main>
+        <Footer />
       </body>
     </html>
   )

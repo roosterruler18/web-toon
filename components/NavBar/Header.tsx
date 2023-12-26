@@ -14,19 +14,61 @@ import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import { MdMenu } from "react-icons/md";
-import { Badge, Container, InputBase, Stack, ThemeProvider, alpha, createTheme, styled } from '@mui/material';
+import { Badge, Container, InputBase, Slide, Stack, ThemeProvider, alpha, createTheme, styled, useScrollTrigger } from '@mui/material';
 import theme from '@/themes/theme';
 import { IoSearchOutline } from "react-icons/io5";
 import { FiBell } from "react-icons/fi";
-
-
+import { FaUserAstronaut } from "react-icons/fa";
+import logo from '@/public/brand.png'
+import Image from 'next/image';
+import Link from 'next/link';
 
 interface Props {
     window?: () => Window;
+    children: React.ReactElement;
+}
+
+const HideOnScroll = (props: Props) => {
+    const { children, window } = props;
+    const trigger = useScrollTrigger({
+        target: window ? window() : undefined,
+    });
+
+    return (
+        <Slide appear={false} direction="down" in={!trigger}>
+            {children}
+        </Slide>
+    );
 }
 
 const drawerWidth = 240;
-const navItems = ['Home', 'About', 'Contact'];
+const navItems = [
+    {
+        id: '1',
+        title: 'Home',
+        link: '/',
+    },
+    {
+        id: '2',
+        title: 'About us',
+        link: '/about',
+    },
+    {
+        id: '3',
+        title: 'Categories',
+        link: '/categories',
+    },
+    {
+        id: '4',
+        title: 'Blog',
+        link: '/blog',
+    },
+    {
+        id: '5',
+        title: 'Contact',
+        link: '/contact',
+    },
+];
 
 const darkTheme = createTheme({
     palette: {
@@ -52,10 +94,10 @@ export default function Header(props: Props) {
             </Typography>
             <Divider />
             <List>
-                {navItems.map((item) => (
-                    <ListItem key={item} disablePadding>
+                {navItems.map((item, index) => (
+                    <ListItem key={item.id} disablePadding>
                         <ListItemButton sx={{ textAlign: 'center' }}>
-                            <ListItemText primary={item} />
+                            <ListItemText primary={item.title} />
                         </ListItemButton>
                     </ListItem>
                 ))}
@@ -107,55 +149,63 @@ export default function Header(props: Props) {
     }));
 
     return (
-        <Stack spacing={2} sx={{ flexGrow: 1 }}>
+        <Stack spacing={7} sx={{ flexGrow: 1 }}>
             <ThemeProvider theme={darkTheme}>
                 <CssBaseline />
-                <AppBar component="nav">
-                    <Container maxWidth='xl' sx={{ px: theme.spacing(2) }}>
-                        <Toolbar>
-                            <IconButton
-                                color="inherit"
-                                aria-label="open drawer"
-                                edge="start"
-                                onClick={handleDrawerToggle}
-                                sx={{ mr: 2, display: { sm: 'none' } }}
-                            >
-                                <MdMenu />
-                            </IconButton>
-                            <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
-                                {navItems.map((item) => (
-                                    <Button key={item} sx={{ color: '#fff' }}>
-                                        {item}
-                                    </Button>
-                                ))}
-                            </Box>
-                            <Typography
-                                variant="h6"
-                                component="div"
-                                sx={{ flexGrow: 1, display: { xs: 'none', sm: 'block' }, textAlign: 'center' }}
-                            >
-                                MUI
-                            </Typography>
-                            <Box sx={{ display: { xs: 'none', sm: 'flex' }, alignItems: 'center', gap: '16px' }}>
-                                <Search sx={{ display: 'flex', alignItems: 'center', height: '40px' }}>
-                                    <SearchIconWrapper>
-                                        <IoSearchOutline />
-                                    </SearchIconWrapper>
-                                    <StyledInputBase
-                                        placeholder="Search…"
-                                        inputProps={{ 'aria-label': 'search' }}
-                                    />
-                                </Search>
-                                <IconButton size="large" aria-label="show 17 new notifications" color="inherit">
-                                    <Badge badgeContent={4} color="error">
-                                        <FiBell />
-                                    </Badge>
+                <HideOnScroll {...props}>
+                    <AppBar component="nav" className='py-2'>
+                        <Container maxWidth='xl' sx={{ py: theme.spacing(1) }}>
+                            <Toolbar>
+                                <IconButton
+                                    color="inherit"
+                                    aria-label="open drawer"
+                                    edge="start"
+                                    onClick={handleDrawerToggle}
+                                    sx={{ mr: 2, display: { sm: 'none' } }}
+                                >
+                                    <MdMenu />
                                 </IconButton>
+                                <Link href='/' className='ml-8 sm:ml-0'>
+                                    <Image src={logo} alt={''} />
+                                </Link>
+                                <Box sx={{ display: { xs: 'none', sm: 'block' } }} className='mx-auto'>
+                                    {navItems.map((item, index) => (
+                                        <Link href={item.link} key={item.id}>
+                                            <Button sx={{ color: '#fff' }}>
+                                                {item.title}
+                                            </Button>
+                                        </Link>
+                                    ))}
+                                </Box>
+                                <Box sx={{ display: { xs: 'none', sm: 'flex' }, alignItems: 'center', gap: '16px' }} className='ml-auto'>
+                                    <Search sx={{ display: 'flex', alignItems: 'center', height: '40px' }}>
+                                        <SearchIconWrapper>
+                                            <IoSearchOutline />
+                                        </SearchIconWrapper>
+                                        <StyledInputBase
+                                            placeholder="Search…"
+                                            inputProps={{ 'aria-label': 'search' }}
+                                        />
+                                    </Search>
+                                    <IconButton size="large" aria-label="show 17 new notifications" color="inherit">
+                                        <Badge badgeContent={4} color="error">
+                                            <FiBell />
+                                        </Badge>
+                                    </IconButton>
+                                    <IconButton size="large"
+                                        edge="end"
+                                        aria-label="account of current user"
+                                        aria-controls={''}
+                                        aria-haspopup="true"
+                                        color="inherit">
+                                        <FaUserAstronaut />
+                                    </IconButton>
 
-                            </Box>
-                        </Toolbar>
-                    </Container>
-                </AppBar>
+                                </Box>
+                            </Toolbar>
+                        </Container>
+                    </AppBar>
+                </HideOnScroll>
                 <nav>
                     <Drawer
                         container={container}

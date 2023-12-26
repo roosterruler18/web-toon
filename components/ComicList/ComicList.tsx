@@ -13,7 +13,7 @@ const ComicList = () => {
         <ul>
             {comics.map((comic) => (
                 <li key={comic.id}>
-                    <Link href={`/comics/${comic.category}/${comic.slug}`}>
+                    <Link href={`/categories/${comic.category}/${comic.slug}`}>
                         {comic.title}
                     </Link>
                 </li>

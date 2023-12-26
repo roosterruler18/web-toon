@@ -1,13 +1,11 @@
 // pages/index.js
 import React from 'react';
 import ComicList from '@/components/ComicList/ComicList';
+import SwiperBanner from '@/components/HeroBanner/swiperbanner';
 
 const HomePage = () => {
   return (
-    <div>
-      <h1>Trang Chủ</h1>
-      <ComicList />
-    </div>
+    <SwiperBanner />
   );
 };
 
