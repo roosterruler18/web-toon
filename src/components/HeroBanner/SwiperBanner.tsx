@@ -1,6 +1,9 @@
+'use client'
 import * as React from 'react';
 import { Swiper as SwiperModule, SwiperSlide } from 'swiper/react';
 import { Box } from '@mui/material';
+import 'swiper/css';
+
 
 const SwiperBanner = () => {
     return (
@@ -10,7 +13,6 @@ const SwiperBanner = () => {
                     effect="fade"
                     spaceBetween={0}
                     slidesPerView={1}
-                    lazy={true}
                     autoplay={{
                         delay: 9000,
                         disableOnInteraction: true,
